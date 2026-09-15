@@ -13,14 +13,44 @@ export const FEATURED_PRODUCT: Product = {
     { name: 'White Titanium', hex: '#e8e7e2' },
     { name: 'Desert Titanium', hex: '#b99b7b' },
   ],
-  originalPrice: 149900,
-  discountedPrice: 22485, // 85% OFF
-  discountBadge: '85% OFF • Save ₹1,27,415',
+  originalPrice: 119900,
+  discountedPrice: 11990,
+  discountBadge: '90% OFF • Save ₹1,07,910',
   lowestPriceTag: true,
   image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80',
   inStock: true,
   category: 'Mobiles',
 };
+
+const appleProduct = (
+  id: string,
+  name: string,
+  originalPrice: number,
+  discountedPrice: number,
+  discount: number,
+  storage = '128GB',
+  processor = 'Apple Silicon',
+  image = 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=600&q=80'
+): Product => ({
+  id,
+  name,
+  brand: 'Apple',
+  storage,
+  processor,
+  color: 'Black',
+  colorOptions: [
+    { name: 'Black', hex: '#252525' },
+    { name: 'White', hex: '#e8e7e2' },
+    { name: 'Blue', hex: '#9db9d6' },
+  ],
+  originalPrice,
+  discountedPrice,
+  discountBadge: `${discount}% OFF`,
+  lowestPriceTag: true,
+  image,
+  inStock: true,
+  category: 'Mobiles',
+});
 
 export const SMARTPHONE_PRODUCTS: Product[] = [
   {
@@ -44,6 +74,25 @@ export const SMARTPHONE_PRODUCTS: Product[] = [
     inStock: true,
     category: 'Mobiles',
   },
+  appleProduct('iphone-17-pro-max', 'iPhone 17 Pro Max', 149900, 14990, 90, '256GB', 'A19 Pro'),
+  appleProduct('iphone-17-pro', 'iPhone 17 Pro', 134900, 13490, 90, '256GB', 'A19 Pro'),
+  appleProduct('iphone-17', 'iPhone 17', 89900, 13485, 85, '128GB', 'A19'),
+  appleProduct('iphone-air', 'iPhone Air', 119900, 11990, 90, '256GB', 'A19'),
+  appleProduct('iphone-16-pro-max', 'iPhone 16 Pro Max', 144900, 14490, 90, '256GB', 'A18 Pro'),
+  appleProduct('iphone-16-pro-catalog', 'iPhone 16 Pro', 119900, 11990, 90, '256GB', 'A18 Pro'),
+  appleProduct('iphone-16-plus', 'iPhone 16 Plus', 99900, 14985, 85, '128GB', 'A18'),
+  appleProduct('iphone-16', 'iPhone 16', 79900, 11985, 85, '128GB', 'A18'),
+  appleProduct('iphone-16e', 'iPhone 16e', 59900, 11980, 80, '128GB', 'A18'),
+  appleProduct('iphone-15-pro-max', 'iPhone 15 Pro Max', 159900, 15990, 90, '256GB', 'A17 Pro'),
+  appleProduct('iphone-15-pro', 'iPhone 15 Pro', 134900, 13490, 90, '128GB', 'A17 Pro'),
+  appleProduct('iphone-15-plus', 'iPhone 15 Plus', 89900, 13485, 85, '128GB', 'A16 Bionic'),
+  appleProduct('iphone-14-pro-max', 'iPhone 14 Pro Max', 139900, 13990, 90, '128GB', 'A16 Bionic'),
+  appleProduct('iphone-14-pro', 'iPhone 14 Pro', 129900, 12990, 90, '128GB', 'A16 Bionic'),
+  appleProduct('iphone-14-plus', 'iPhone 14 Plus', 89900, 13485, 85, '128GB', 'A15 Bionic'),
+  appleProduct('iphone-14', 'iPhone 14', 69900, 13980, 80, '128GB', 'A15 Bionic'),
+  appleProduct('iphone-13-pro-max', 'iPhone 13 Pro Max', 129900, 12990, 90, '128GB', 'A15 Bionic'),
+  appleProduct('iphone-13-pro', 'iPhone 13 Pro', 119900, 11990, 90, '128GB', 'A15 Bionic'),
+  appleProduct('iphone-13', 'iPhone 13', 59900, 11980, 80, '128GB', 'A15 Bionic'),
   {
     id: 'samsung-galaxy-s24',
     name: 'Samsung Galaxy S24',
