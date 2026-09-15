@@ -1,0 +1,6 @@
+{
+  "name": "Denzy - Best Phones. Lowest Prices",
+  "description": "Official store for Denzy offering best smartphone deals, authentic UPI scan & pay checkout, free delivery, and secure warranty.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

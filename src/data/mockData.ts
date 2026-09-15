@@ -1,0 +1,148 @@
+import { Product } from '../types';
+
+export const FEATURED_PRODUCT: Product = {
+  id: 'iphone-16-pro',
+  name: 'iPhone 16 Pro',
+  brand: 'Apple',
+  storage: '256GB',
+  processor: 'A18 Pro',
+  color: 'Natural Titanium',
+  originalPrice: 149900,
+  discountedPrice: 22485, // 85% OFF
+  discountBadge: '85% OFF • Save ₹1,27,415',
+  lowestPriceTag: true,
+  image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80',
+  inStock: true,
+  category: 'Mobiles',
+};
+
+export const SMARTPHONE_PRODUCTS: Product[] = [
+  {
+    id: 'iphone-15',
+    name: 'iPhone 15',
+    brand: 'Apple',
+    storage: '128GB',
+    processor: 'A16 Bionic',
+    color: 'Black',
+    originalPrice: 79900,
+    discountedPrice: 11985, // 85% OFF
+    discountBadge: '85% OFF • Save ₹67,915',
+    lowestPriceTag: true,
+    image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=600&q=80',
+    inStock: true,
+    category: 'Mobiles',
+  },
+  {
+    id: 'samsung-galaxy-s24',
+    name: 'Samsung Galaxy S24',
+    brand: 'Samsung',
+    storage: '256GB',
+    processor: 'Exynos 2400',
+    color: 'Onyx Black',
+    originalPrice: 74999,
+    discountedPrice: 11249, // 85% OFF
+    discountBadge: '85% OFF • Save ₹63,750',
+    lowestPriceTag: true,
+    image: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80',
+    inStock: true,
+    category: 'Mobiles',
+  },
+  {
+    id: 'oneplus-12',
+    name: 'OnePlus 12',
+    brand: 'OnePlus',
+    storage: '256GB',
+    processor: 'Snapdragon 8 Gen 3',
+    color: 'Emerald Green',
+    originalPrice: 69999,
+    discountedPrice: 10499, // 85% OFF
+    discountBadge: '85% OFF • Save ₹59,500',
+    lowestPriceTag: true,
+    image: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=600&q=80',
+    inStock: true,
+    category: 'Mobiles',
+  },
+  {
+    id: 'vivo-v40',
+    name: 'vivo V40',
+    brand: 'vivo',
+    storage: '256GB',
+    processor: 'Snapdragon 7 Gen 3',
+    color: 'Lotus Purple',
+    originalPrice: 54999,
+    discountedPrice: 8249, // 85% OFF
+    discountBadge: '85% OFF • Save ₹46,750',
+    lowestPriceTag: true,
+    image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80',
+    inStock: true,
+    category: 'Mobiles',
+  },
+  {
+    id: 'realme-13-pro-plus',
+    name: 'realme 13 Pro+',
+    brand: 'realme',
+    storage: '256GB',
+    processor: 'Dimensity 7300',
+    color: 'Monet Gold',
+    originalPrice: 42999,
+    discountedPrice: 6449, // 85% OFF
+    discountBadge: '85% OFF • Save ₹36,550',
+    lowestPriceTag: true,
+    image: 'https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=600&q=80',
+    inStock: true,
+    category: 'Mobiles',
+  },
+  {
+    id: 'redmi-note-13',
+    name: 'Redmi Note 13',
+    brand: 'Xiaomi',
+    storage: '128GB',
+    processor: 'Snapdragon 685',
+    color: 'Ocean Blue',
+    originalPrice: 21999,
+    discountedPrice: 3299, // 85% OFF
+    discountBadge: '85% OFF • Save ₹18,700',
+    lowestPriceTag: true,
+    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02560?auto=format&fit=crop&w=600&q=80',
+    inStock: true,
+    category: 'Mobiles',
+  }
+];
+
+export const BRANDS = [
+  { name: 'Apple', logo: '' },
+  { name: 'SAMSUNG', logo: 'SAMSUNG' },
+  { name: 'OnePlus', logo: '1+' },
+  { name: 'vivo', logo: 'vivo' },
+  { name: 'realme', logo: 'realme' },
+  { name: 'mi', logo: 'mi' },
+  { name: 'oppo', logo: 'oppo' },
+  { name: 'Google', logo: 'G' },
+  { name: 'NOTHING', logo: 'NOTHING' },
+  { name: 'motorola', logo: 'M' },
+];
+
+export const CATEGORIES = [
+  { id: 'home', name: 'Home', icon: 'Home' },
+  { id: 'mobiles', name: 'Mobiles', icon: 'Smartphone' },
+  { id: 'electronics', name: 'Electronics', icon: 'Laptop' },
+  { id: 'fashion', name: 'Fashion', icon: 'Shirt' },
+  { id: 'men', name: 'Men', icon: 'User' },
+  { id: 'women', name: 'Women', icon: 'UserCheck' },
+  { id: 'home-kitchen', name: 'Home & Kitchen', icon: 'Coffee' },
+  { id: 'beauty', name: 'Beauty', icon: 'Sparkles' },
+];
+
+export const SITEMAP_PAGES = [
+  { path: '/', title: 'Home - Denzy Store', changefreq: 'daily', priority: '1.0' },
+  { path: '/checkout', title: 'Payment & Checkout - Denzy UPI Scanner', changefreq: 'weekly', priority: '0.9' },
+  { path: '/mobiles', title: 'Smartphones & Mobiles Catalog', changefreq: 'daily', priority: '0.9' },
+  { path: '/product/iphone-16-pro', title: 'iPhone 16 Pro Natural Titanium 256GB', changefreq: 'weekly', priority: '0.95' },
+  { path: '/product/samsung-galaxy-s24', title: 'Samsung Galaxy S24 256GB', changefreq: 'weekly', priority: '0.9' },
+  { path: '/product/oneplus-12', title: 'OnePlus 12 256GB Snapdragon 8 Gen 3', changefreq: 'weekly', priority: '0.85' },
+  { path: '/product/vivo-v40', title: 'vivo V40 256GB Snapdragon 7 Gen 3', changefreq: 'weekly', priority: '0.85' },
+  { path: '/product/realme-13-pro-plus', title: 'realme 13 Pro+ 256GB Dimensity 7300', changefreq: 'weekly', priority: '0.8' },
+  { path: '/product/redmi-note-13', title: 'Redmi Note 13 128GB Snapdragon 685', changefreq: 'weekly', priority: '0.8' },
+  { path: '/offers', title: 'Deals & Discount Coupons', changefreq: 'daily', priority: '0.8' },
+  { path: '/support', title: 'Customer Support & Help Desk', changefreq: 'monthly', priority: '0.5' },
+];
