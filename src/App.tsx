@@ -19,12 +19,22 @@ import { Footer } from './components/Footer';
 import { SMARTPHONE_PRODUCTS, FEATURED_PRODUCT } from './data/mockData';
 import { Product, CartItem } from './types';
 
+const shuffleProducts = (products: Product[]) => {
+  const shuffled = [...products];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+  return shuffled;
+};
+
 export default function App() {
   const [currentView, setCurrentView] = useState<'home' | 'checkout'>('home');
   const [activeCategory, setActiveCategory] = useState<string>('home');
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSitemapOpen, setIsSitemapOpen] = useState<boolean>(false);
+  const [shuffledProducts] = useState<Product[]>(() => shuffleProducts(SMARTPHONE_PRODUCTS));
 
   // Initial cart with iPhone 16 Pro matching Screenshot 2 (Cart badge 1, iPhone 16 Pro 256GB Natural Titanium)
   const [cartItems, setCartItems] = useState<CartItem[]>([
@@ -88,7 +98,7 @@ export default function App() {
   };
 
   // Filter products by brand and search query
-  const filteredProducts = SMARTPHONE_PRODUCTS.filter((p) => {
+  const filteredProducts = shuffledProducts.filter((p) => {
     const matchesBrand = selectedBrand
       ? p.brand.toLowerCase() === selectedBrand.toLowerCase()
       : true;
