@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { Product } from '../types';
 
@@ -17,6 +17,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   isWishlisted,
   onSelectProduct,
 }) => {
+  const [selectedColor, setSelectedColor] = useState(
+    product.colorOptions?.find((option) => option.name === product.color) || product.colorOptions?.[0]
+  );
+  const hasColorChoices = product.brand === 'Apple' && Boolean(product.colorOptions?.length);
+  const displayedProduct = selectedColor
+    ? { ...product, color: selectedColor.name }
+    : product;
+
   return (
     <div
       id={`product-card-${product.id}`}
@@ -51,12 +59,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Product Image */}
       <div
         onClick={() => onSelectProduct && onSelectProduct(product)}
-        className="w-full aspect-square my-2 cursor-pointer flex items-center justify-center p-2 overflow-hidden"
+        className="relative w-full aspect-square my-2 cursor-pointer flex items-center justify-center p-2 overflow-hidden"
       >
+        {hasColorChoices && selectedColor && (
+          <div
+            className="absolute right-3 bottom-4 w-16 h-28 rounded-[15px] border border-black/10 shadow-lg rotate-[8deg]"
+            style={{ backgroundColor: selectedColor.hex }}
+            aria-label={`${selectedColor.name} phone back preview`}
+          >
+            <div className="absolute left-1.5 top-2 w-7 h-8 rounded-lg bg-black/75 p-1 grid grid-cols-2 gap-0.5">
+              <span className="rounded-full bg-zinc-400" />
+              <span className="rounded-full bg-zinc-400" />
+              <span className="rounded-full bg-zinc-400" />
+            </div>
+            <span className="absolute inset-x-0 bottom-3 text-center text-[6px] font-bold text-black/35">APPLE</span>
+          </div>
+        )}
         <img
           src={product.image}
           alt={`${product.name} - ${product.storage}`}
-          className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+          className="relative z-10 max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
           referrerPolicy="no-referrer"
           loading="lazy"
         />
@@ -74,6 +96,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <p className="text-[11px] text-gray-500 font-medium truncate mt-0.5">
           {product.storage} | {product.processor}
         </p>
+
+        {hasColorChoices && selectedColor && (
+          <div className="mt-2">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-semibold text-gray-600 truncate">
+                {selectedColor.name}
+              </span>
+              <span className="text-[9px] text-gray-400">Color</span>
+            </div>
+            <div className="flex items-center gap-1.5 mt-1.5" role="group" aria-label="Choose phone color">
+              {product.colorOptions?.map((option) => (
+                <button
+                  key={option.name}
+                  type="button"
+                  onClick={() => setSelectedColor(option)}
+                  aria-label={`Choose ${option.name}`}
+                  aria-pressed={selectedColor.name === option.name}
+                  className={`w-4 h-4 rounded-full border-2 transition-transform ${
+                    selectedColor.name === option.name
+                      ? 'border-slate-900 scale-110'
+                      : 'border-white ring-1 ring-gray-300 hover:scale-110'
+                  }`}
+                  style={{ backgroundColor: option.hex }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Price Row */}
         <div className="flex items-baseline gap-1.5 mt-2">
@@ -97,7 +147,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Add to Cart Button (Screenshot 1 exact style) */}
         <button
           id={`add-to-cart-${product.id}`}
-          onClick={() => onAddToCart(product)}
+          onClick={() => onAddToCart(displayedProduct)}
           className="mt-3.5 w-full py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-colors active:scale-[0.98]"
         >
           <ShoppingCart className="w-3.5 h-3.5" />

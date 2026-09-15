@@ -7,6 +7,12 @@ export const FEATURED_PRODUCT: Product = {
   storage: '256GB',
   processor: 'A18 Pro',
   color: 'Natural Titanium',
+  colorOptions: [
+    { name: 'Natural Titanium', hex: '#a7a9ac' },
+    { name: 'Black Titanium', hex: '#3a3b3d' },
+    { name: 'White Titanium', hex: '#e8e7e2' },
+    { name: 'Desert Titanium', hex: '#b99b7b' },
+  ],
   originalPrice: 149900,
   discountedPrice: 22485, // 85% OFF
   discountBadge: '85% OFF • Save ₹1,27,415',
@@ -24,6 +30,12 @@ export const SMARTPHONE_PRODUCTS: Product[] = [
     storage: '128GB',
     processor: 'A16 Bionic',
     color: 'Black',
+    colorOptions: [
+      { name: 'Black', hex: '#252525' },
+      { name: 'Blue', hex: '#a8c5e5' },
+      { name: 'Green', hex: '#c4d8c2' },
+      { name: 'Yellow', hex: '#f4e7a2' },
+    ],
     originalPrice: 79900,
     discountedPrice: 11985, // 85% OFF
     discountBadge: '85% OFF • Save ₹67,915',

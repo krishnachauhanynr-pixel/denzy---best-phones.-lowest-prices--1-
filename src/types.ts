@@ -5,6 +5,10 @@ export interface Product {
   storage: string;
   processor: string;
   color?: string;
+  colorOptions?: Array<{
+    name: string;
+    hex: string;
+  }>;
   originalPrice: number;
   discountedPrice: number;
   discountBadge: string;
