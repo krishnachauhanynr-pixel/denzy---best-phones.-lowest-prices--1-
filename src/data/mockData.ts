@@ -52,6 +52,31 @@ const appleProduct = (
   category: 'Mobiles',
 });
 
+const vivoProduct = (
+  id: string,
+  name: string,
+  originalPrice: number,
+  discountedPrice: number,
+  discount: number,
+  storage = '256GB',
+  processor = 'MediaTek Dimensity',
+  image = 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80'
+): Product => ({
+  id,
+  name,
+  brand: 'vivo',
+  storage,
+  processor,
+  color: 'Black',
+  originalPrice,
+  discountedPrice,
+  discountBadge: `${discount}% OFF`,
+  lowestPriceTag: true,
+  image,
+  inStock: true,
+  category: 'Mobiles',
+});
+
 export const SMARTPHONE_PRODUCTS: Product[] = [
   {
     id: 'iphone-15',
@@ -273,21 +298,26 @@ export const SMARTPHONE_PRODUCTS: Product[] = [
     inStock: true,
     category: 'Mobiles',
   },
-  {
-    id: 'vivo-v40',
-    name: 'vivo V40',
-    brand: 'vivo',
-    storage: '256GB',
-    processor: 'Snapdragon 7 Gen 3',
-    color: 'Lotus Purple',
-    originalPrice: 54999,
-    discountedPrice: 8249, // 85% OFF
-    discountBadge: '85% OFF • Save ₹46,750',
-    lowestPriceTag: true,
-    image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80',
-    inStock: true,
-    category: 'Mobiles',
-  },
+  vivoProduct('vivo-x200-pro', 'Vivo X200 Pro', 94999, 9499, 90, '512GB', 'MediaTek Dimensity 9400'),
+  vivoProduct('vivo-x200', 'Vivo X200', 65999, 6599, 90, '256GB', 'MediaTek Dimensity 9400'),
+  vivoProduct('vivo-x200-fe', 'Vivo X200 FE', 54999, 8249, 85, '256GB', 'MediaTek Dimensity 9300+'),
+  vivoProduct('vivo-x100-pro', 'Vivo X100 Pro', 89999, 8999, 90, '512GB', 'MediaTek Dimensity 9300'),
+  vivoProduct('vivo-x100', 'Vivo X100', 63999, 9599, 85, '256GB', 'MediaTek Dimensity 9300'),
+  vivoProduct('vivo-v60-pro', 'Vivo V60 Pro', 49999, 7499, 85, '256GB', 'Snapdragon 7 Gen 4'),
+  vivoProduct('vivo-v60', 'Vivo V60', 39999, 5999, 85, '256GB', 'Snapdragon 7 Gen 4'),
+  vivoProduct('vivo-v50', 'Vivo V50', 34999, 5249, 85, '256GB', 'Snapdragon 7 Gen 3'),
+  vivoProduct('vivo-v40-pro', 'Vivo V40 Pro', 49999, 4999, 90, '512GB', 'MediaTek Dimensity 9200+'),
+  vivoProduct('vivo-v40', 'Vivo V40', 34999, 5249, 85, '256GB', 'Snapdragon 7 Gen 3'),
+  vivoProduct('vivo-v30-pro', 'Vivo V30 Pro', 41999, 6299, 85, '256GB', 'MediaTek Dimensity 8200'),
+  vivoProduct('vivo-v30', 'Vivo V30', 33999, 6799, 80, '128GB', 'Snapdragon 7 Gen 3'),
+  vivoProduct('vivo-v29-pro', 'Vivo V29 Pro', 42999, 6449, 85, '256GB', 'MediaTek Dimensity 8200'),
+  vivoProduct('vivo-v29', 'Vivo V29', 32999, 6599, 80, '128GB', 'Snapdragon 778G'),
+  vivoProduct('vivo-t4-pro-5g', 'Vivo T4 Pro 5G', 29999, 5999, 80, '256GB', 'Snapdragon 7 Gen 4'),
+  vivoProduct('vivo-t4-5g', 'Vivo T4 5G', 24999, 4999, 80, '128GB', 'Snapdragon 7s Gen 3'),
+  vivoProduct('vivo-t3-pro-5g', 'Vivo T3 Pro 5G', 26999, 5399, 80, '128GB', 'Snapdragon 7 Gen 3'),
+  vivoProduct('vivo-t3-5g', 'Vivo T3 5G', 22999, 4599, 80, '128GB', 'Dimensity 7200'),
+  vivoProduct('vivo-y39-5g', 'Vivo Y39 5G', 19999, 3999, 80, '128GB', 'Snapdragon 4 Gen 2'),
+  vivoProduct('vivo-y29-5g', 'Vivo Y29 5G', 18999, 3799, 80, '128GB', 'Snapdragon 4 Gen 2'),
   {
     id: 'realme-13-pro-plus',
     name: 'realme 13 Pro+',
