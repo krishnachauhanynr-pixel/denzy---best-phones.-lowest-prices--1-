@@ -301,16 +301,14 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
                 {selectedMethod}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                {selectedMethod === 'cod'
-                  ? 'Pay ₹' + totalAmount.toLocaleString('en-IN') + ' in cash upon doorstep delivery.'
-                  : 'You will be securely redirected to complete your payment.'}
+                You will be securely redirected to complete your payment.
               </p>
               <button
                 id="complete-other-payment-btn"
                 onClick={handleSimulatePaymentSuccess}
                 className="mt-6 py-2 px-6 rounded-lg bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition"
               >
-                {selectedMethod === 'cod' ? 'Confirm Cash on Delivery Order' : 'Proceed to Pay'}
+                Proceed to Pay
               </button>
             </div>
           )}
