@@ -8,6 +8,7 @@ interface UpiQrCodeProps {
   onScanSimulate?: () => void;
   storageKey?: string;
   scannerLabel?: string;
+  defaultSrc?: string;
 }
 
 export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
@@ -17,9 +18,10 @@ export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
   onScanSimulate,
   storageKey = 'custom_payment_scanner',
   scannerLabel = 'UPI',
+  defaultSrc = '/qr.png',
 }) => {
   const [isZoomed, setIsZoomed] = useState(false);
-  const [scannerSrc, setScannerSrc] = useState<string>('/qr.png');
+  const [scannerSrc, setScannerSrc] = useState<string>(defaultSrc);
   const [isCustomUploaded, setIsCustomUploaded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -28,8 +30,11 @@ export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
     if (saved) {
       setScannerSrc(saved);
       setIsCustomUploaded(true);
+    } else {
+      setScannerSrc(defaultSrc);
+      setIsCustomUploaded(false);
     }
-  }, [storageKey]);
+  }, [defaultSrc, storageKey]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

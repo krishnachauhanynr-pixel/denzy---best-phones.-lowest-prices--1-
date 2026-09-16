@@ -436,6 +436,7 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
                   size={220}
                   storageKey={`custom_payment_scanner_${selectedCryptoNetwork}`}
                   scannerLabel={qrWallet.label}
+                  defaultSrc={`/${selectedCryptoNetwork}-qr.png`}
                   onScanSimulate={handleSimulatePaymentSuccess}
                 />
 
