@@ -35,6 +35,7 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
 }) => {
   const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethodType>('upi');
+  const [selectedCryptoNetwork, setSelectedCryptoNetwork] = useState<'bnb' | 'btc'>('bnb');
   const [address, setAddress] = useState<AddressInfo>({
     fullName: '',
     phoneNumber: '',
@@ -77,6 +78,43 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
       onCompleteOrder(generatedOrderId, totalAmount, selectedMethod);
     }, 1200);
   };
+
+  const cryptoWallets = {
+    bnb: {
+      label: 'BNB Smart Chain',
+      ticker: 'USDT',
+      address: '0x7AdBFC8e9c35654C3285B9F97664DAdE90937',
+      shortAddress: '0x7AdBFC8e9c35654C3285B9F97664DAdE90937',
+      accent: 'from-amber-500 to-yellow-500',
+    },
+    btc: {
+      label: 'Bitcoin',
+      ticker: 'BTC',
+      address: 'bc1Q8am0r1h0s5kajnwcule8x2d2wqjaep67v6nsch0',
+      shortAddress: 'bc1Q8am0r1h0s5kajnwcule8x2d2wqjaep67v6nsch0',
+      accent: 'from-orange-500 to-amber-400',
+    },
+  } as const;
+
+  const cryptoQrMatrix = Array.from({ length: 21 }, (_, row) =>
+    Array.from({ length: 21 }, (_, col) => {
+      const inFinderTopLeft = row < 7 && col < 7;
+      const inFinderTopRight = row < 7 && col >= 14;
+      const inFinderBottomLeft = row >= 14 && col < 7;
+      const inFinder = inFinderTopLeft || inFinderTopRight || inFinderBottomLeft;
+
+      if (inFinder) {
+        const edge = row === 0 || row === 6 || col === 0 || col === 6;
+        const inner = row >= 2 && row <= 4 && col >= 2 && col <= 4;
+        return edge || inner ? 1 : 0;
+      }
+
+      const value = (row * 17 + col * 13 + (row ^ col)) % 7;
+      return value < 3 || (row + col) % 5 === 0 ? 1 : 0;
+    })
+  );
+
+  const qrWallet = cryptoWallets[selectedCryptoNetwork];
 
   return (
     <div id="payment-scanner-checkout-page" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -256,6 +294,34 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
               </div>
               <CreditCard className="w-5 h-5 text-gray-700" />
             </label>
+
+            {/* Method 3: USDT / Crypto wallet */}
+            <label
+              id="payment-method-usdt"
+              onClick={() => setSelectedMethod('usdt')}
+              className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
+                selectedMethod === 'usdt'
+                  ? 'border-gray-900 bg-gray-50/70 ring-1 ring-gray-900 shadow-2xs'
+                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50/30'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  checked={selectedMethod === 'usdt'}
+                  onChange={() => setSelectedMethod('usdt')}
+                  className="w-4 h-4 text-black border-gray-300 focus:ring-black accent-black"
+                />
+                <div>
+                  <span className="block text-xs font-bold text-gray-900">USDT / Crypto Wallet</span>
+                  <span className="block text-[11px] text-gray-500 mt-0.5">BNB Smart Chain or Bitcoin</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-amber-500 to-yellow-500 text-[8px] font-black text-white">
+                ₮
+              </div>
+            </label>
           </div>
         </div>
 
@@ -355,6 +421,68 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
                   Pay ₹{totalAmount.toLocaleString('en-IN')}
                 </button>
               </div>
+            </div>
+          ) : selectedMethod === 'usdt' ? (
+            <div className="w-full text-left">
+              <h2 className="text-base font-bold text-gray-900 tracking-tight text-center">
+                Pay with USDT
+              </h2>
+              <p className="text-xs text-gray-500 text-center mt-0.5">
+                Send crypto to the wallet below and we’ll confirm automatically.
+              </p>
+
+              <div className="mt-5 flex items-center justify-center gap-2 text-[11px] font-bold">
+                {(['bnb', 'btc'] as const).map((network) => (
+                  <button
+                    key={network}
+                    type="button"
+                    onClick={() => setSelectedCryptoNetwork(network)}
+                    className={`px-3 py-1.5 rounded-full border transition ${
+                      selectedCryptoNetwork === network
+                        ? 'bg-slate-900 text-white border-slate-900'
+                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {network === 'bnb' ? 'BNB Smart Chain' : 'Bitcoin'}
+                  </button>
+                ))}
+              </div>
+
+              <div className="my-5 flex flex-col items-center">
+                <div className="relative w-[220px] h-[220px] rounded-2xl border-2 border-gray-200 bg-white p-3 shadow-sm flex items-center justify-center">
+                  <div
+                    className="grid gap-[2px] w-full h-full rounded-xl bg-white p-1"
+                    style={{ gridTemplateColumns: 'repeat(21, minmax(0, 1fr))' }}
+                  >
+                    {cryptoQrMatrix.flatMap((row, rowIndex) =>
+                      row.map((cell, cellIndex) => (
+                        <span
+                          key={`${rowIndex}-${cellIndex}`}
+                          className={`rounded-[1px] ${cell ? 'bg-black' : 'bg-white'}`}
+                        />
+                      ))
+                    )}
+                  </div>
+                  <div className={`absolute flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br ${qrWallet.accent} text-[10px] font-black text-white shadow-lg`}>
+                    {qrWallet.ticker.slice(0, 1)}
+                  </div>
+                </div>
+
+                <span className="text-xs font-bold text-gray-900 mt-3.5">
+                  {qrWallet.label} Wallet
+                </span>
+                <span className="text-[11px] text-gray-500 font-medium mt-0.5 max-w-[240px] text-center break-all">
+                  {qrWallet.address}
+                </span>
+              </div>
+
+              <button
+                id="pay-usdt-btn"
+                onClick={handleSimulatePaymentSuccess}
+                className="w-full mt-4 py-2.5 rounded-lg bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition"
+              >
+                I have sent {qrWallet.ticker} payment
+              </button>
             </div>
           ) : (
             /* Other payment method handlers */

@@ -26,7 +26,7 @@ export interface CartItem {
   selectedStorage?: string;
 }
 
-export type PaymentMethodType = 'upi' | 'card' | 'netbanking' | 'wallets';
+export type PaymentMethodType = 'upi' | 'card' | 'netbanking' | 'wallets' | 'usdt';
 
 export type CheckoutStep = 1 | 2 | 3; // 1: Shipping Address, 2: Payment, 3: Order Confirmation
 
