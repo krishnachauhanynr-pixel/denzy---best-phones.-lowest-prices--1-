@@ -96,24 +96,6 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
     },
   } as const;
 
-  const cryptoQrMatrix = Array.from({ length: 21 }, (_, row) =>
-    Array.from({ length: 21 }, (_, col) => {
-      const inFinderTopLeft = row < 7 && col < 7;
-      const inFinderTopRight = row < 7 && col >= 14;
-      const inFinderBottomLeft = row >= 14 && col < 7;
-      const inFinder = inFinderTopLeft || inFinderTopRight || inFinderBottomLeft;
-
-      if (inFinder) {
-        const edge = row === 0 || row === 6 || col === 0 || col === 6;
-        const inner = row >= 2 && row <= 4 && col >= 2 && col <= 4;
-        return edge || inner ? 1 : 0;
-      }
-
-      const value = (row * 17 + col * 13 + (row ^ col)) % 7;
-      return value < 3 || (row + col) % 5 === 0 ? 1 : 0;
-    })
-  );
-
   const qrWallet = cryptoWallets[selectedCryptoNetwork];
 
   return (
@@ -449,24 +431,13 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
               </div>
 
               <div className="my-5 flex flex-col items-center">
-                <div className="relative w-[220px] h-[220px] rounded-2xl border-2 border-gray-200 bg-white p-3 shadow-sm flex items-center justify-center">
-                  <div
-                    className="grid gap-[2px] w-full h-full rounded-xl bg-white p-1"
-                    style={{ gridTemplateColumns: 'repeat(21, minmax(0, 1fr))' }}
-                  >
-                    {cryptoQrMatrix.flatMap((row, rowIndex) =>
-                      row.map((cell, cellIndex) => (
-                        <span
-                          key={`${rowIndex}-${cellIndex}`}
-                          className={`rounded-[1px] ${cell ? 'bg-black' : 'bg-white'}`}
-                        />
-                      ))
-                    )}
-                  </div>
-                  <div className={`absolute flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br ${qrWallet.accent} text-[10px] font-black text-white shadow-lg`}>
-                    {qrWallet.ticker.slice(0, 1)}
-                  </div>
-                </div>
+                <UpiQrCode
+                  amount={totalAmount}
+                  size={220}
+                  storageKey={`custom_payment_scanner_${selectedCryptoNetwork}`}
+                  scannerLabel={qrWallet.label}
+                  onScanSimulate={handleSimulatePaymentSuccess}
+                />
 
                 <span className="text-xs font-bold text-gray-900 mt-3.5">
                   {qrWallet.label} Wallet

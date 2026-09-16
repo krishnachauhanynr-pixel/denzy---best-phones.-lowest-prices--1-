@@ -6,13 +6,17 @@ interface UpiQrCodeProps {
   size?: number;
   isHovered?: boolean;
   onScanSimulate?: () => void;
+  storageKey?: string;
+  scannerLabel?: string;
 }
 
 export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
   amount = 22485,
   size = 210,
   isHovered = false,
-  onScanSimulate
+  onScanSimulate,
+  storageKey = 'custom_payment_scanner',
+  scannerLabel = 'UPI',
 }) => {
   const [isZoomed, setIsZoomed] = useState(false);
   const [scannerSrc, setScannerSrc] = useState<string>('/qr.png');
@@ -20,12 +24,12 @@ export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('custom_payment_scanner');
+    const saved = localStorage.getItem(storageKey);
     if (saved) {
       setScannerSrc(saved);
       setIsCustomUploaded(true);
     }
-  }, []);
+  }, [storageKey]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -37,7 +41,7 @@ export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
       setScannerSrc(result);
       setIsCustomUploaded(true);
       try {
-        localStorage.setItem('custom_payment_scanner', result);
+        localStorage.setItem(storageKey, result);
       } catch (err) {
         console.warn('Storage full');
       }
@@ -113,7 +117,7 @@ export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span className="flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 inline" />
-              {isCustomUploaded ? 'VERIFIED SCANNER' : 'OFFICIAL SCANNER'}
+              {isCustomUploaded ? 'UPLOADED SCANNER' : `${scannerLabel} SCANNER`}
             </span>
           </div>
           <button
@@ -127,14 +131,14 @@ export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
 
         <div className="w-full mt-2.5 pt-2 border-t border-zinc-800/80 flex items-center justify-between text-[10px]">
           <div className="w-full flex items-center justify-between text-zinc-400">
-            <span className="text-zinc-400">Scan via PhonePe, GPay, Paytm</span>
+            <span className="text-zinc-400">Scan with your {scannerLabel} wallet</span>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
               className="text-zinc-500 hover:text-amber-300 flex items-center gap-1 text-[9px] transition"
             >
               <Upload className="w-2.5 h-2.5" />
-              <span>Upload Custom QR</span>
+              <span>Upload QR</span>
             </button>
           </div>
         </div>
@@ -159,7 +163,7 @@ export const UpiQrCode: React.FC<UpiQrCodeProps> = ({
 
             <div className="flex items-center gap-2 mb-4 text-amber-400 text-sm font-bold">
               <Sparkles className="w-4 h-4" />
-              <span>Full Screen UPI Scanner</span>
+              <span>Full Screen {scannerLabel} Scanner</span>
             </div>
 
             <div className="w-72 h-72 sm:w-80 sm:h-80 bg-black rounded-2xl overflow-hidden border border-zinc-800 flex items-center justify-center p-2">
