@@ -8,7 +8,6 @@ import {
 
   ArrowLeft,
   QrCode as QrIcon,
-  CheckCircle2,
   Sparkles,
 } from 'lucide-react';
 import { UpiQrCode } from './UpiQrCode';
@@ -21,7 +20,7 @@ import {
   PaytmIcon,
   BhimIcon,
 } from './PaymentBadges';
-import { CartItem, PaymentMethodType } from '../types';
+import { AddressInfo, CartItem, PaymentMethodType } from '../types';
 
 interface PaymentScannerCheckoutProps {
   onBackToStore: () => void;
@@ -34,8 +33,16 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
   cartItems,
   onCompleteOrder,
 }) => {
+  const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethodType>('upi');
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [address, setAddress] = useState<AddressInfo>({
+    fullName: '',
+    phoneNumber: '',
+    pincode: '',
+    addressLine: '',
+    city: '',
+    state: '',
+  });
 
   // 80% to 90% discount selector (defaults to 85% as requested)
   const [discountPercent, setDiscountPercent] = useState<number>(85);
@@ -65,9 +72,7 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
   const totalAmount = Math.max(0, originalSubtotal - discountAmount);
 
   const handleSimulatePaymentSuccess = () => {
-    setIsVerifying(true);
     setTimeout(() => {
-      setIsVerifying(false);
       const generatedOrderId = `DNZ-${Math.floor(100000 + Math.random() * 900000)}`;
       onCompleteOrder(generatedOrderId, totalAmount, selectedMethod);
     }, 1200);
@@ -97,26 +102,26 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
           </div>
         </div>
 
-        {/* Stepper Wizard (1. Shipping Address ✓, 2. Payment [Active], 3. Order Confirmation) */}
+        {/* Stepper Wizard */}
         <div className="flex items-center space-x-2 sm:space-x-4 text-xs">
           {/* Step 1: Shipping Address */}
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-              ✓
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shadow-xs ${checkoutStep === 1 ? 'bg-black text-white ring-4 ring-gray-200' : 'bg-slate-800 text-white'}`}>
+              {checkoutStep === 1 ? '1' : '✓'}
             </div>
-            <span className="text-gray-600 font-medium hidden sm:inline">
+            <span className={`${checkoutStep === 1 ? 'text-gray-900 font-bold' : 'text-gray-600 font-medium'} hidden sm:inline`}>
               Shipping Address
             </span>
           </div>
 
           <div className="w-8 sm:w-12 h-[1px] bg-gray-300" />
 
-          {/* Step 2: Payment (Active) */}
+          {/* Step 2: Payment */}
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center font-bold text-xs ring-4 ring-gray-200">
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs ${checkoutStep === 2 ? 'bg-black text-white ring-4 ring-gray-200' : 'border border-gray-300 text-gray-400'}`}>
               2
             </div>
-            <span className="text-gray-900 font-bold">
+            <span className={`${checkoutStep === 2 ? 'text-gray-900 font-bold' : 'text-gray-400 font-medium'} hidden sm:inline`}>
               Payment
             </span>
           </div>
@@ -135,7 +140,59 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
         </div>
       </div>
 
-      {/* Main 3-Column / Layout from Screenshot 2 */}
+      {checkoutStep === 1 ? (
+        <form
+          className="mt-6 max-w-3xl bg-white rounded-xl border border-gray-200/90 p-5 sm:p-6 shadow-xs"
+          onSubmit={(event) => {
+            event.preventDefault();
+            setCheckoutStep(2);
+          }}
+        >
+          <div className="mb-5">
+            <h2 className="text-base font-bold text-gray-900">Shipping Address</h2>
+            <p className="text-xs text-gray-500 mt-1">Enter your delivery details before choosing a payment method.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {([
+              ['fullName', 'Full Name', 'Enter your full name'],
+              ['phoneNumber', 'Phone Number', '10-digit mobile number'],
+              ['pincode', 'Pincode', '6-digit pincode'],
+              ['city', 'City', 'Enter your city'],
+              ['state', 'State', 'Enter your state'],
+            ] as const).map(([field, label, placeholder]) => (
+              <label key={field} className="block">
+                <span className="block text-xs font-semibold text-gray-700">{label}</span>
+                <input
+                  required
+                  type={field === 'phoneNumber' || field === 'pincode' ? 'tel' : 'text'}
+                  value={address[field]}
+                  onChange={(event) => setAddress({ ...address, [field]: event.target.value })}
+                  placeholder={placeholder}
+                  className="w-full mt-1.5 p-2.5 border border-gray-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-black"
+                />
+              </label>
+            ))}
+            <label className="block sm:col-span-2">
+              <span className="block text-xs font-semibold text-gray-700">Address</span>
+              <textarea
+                required
+                value={address.addressLine}
+                onChange={(event) => setAddress({ ...address, addressLine: event.target.value })}
+                placeholder="House / flat, street and landmark"
+                rows={3}
+                className="w-full mt-1.5 p-2.5 border border-gray-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-black resize-none"
+              />
+            </label>
+          </div>
+          <button
+            type="submit"
+            className="mt-5 w-full sm:w-auto px-6 py-2.5 rounded-lg bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition"
+          >
+            Continue to Payment
+          </button>
+        </form>
+      ) : (
+      /* Main 3-Column / Layout from Screenshot 2 */
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-start">
         {/* Left Column: Payment Method List (lg:col-span-4) */}
         <div className="lg:col-span-4 bg-white rounded-xl border border-gray-200/90 p-4 sm:p-5 shadow-xs">
@@ -172,6 +229,32 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
                 </div>
               </div>
               <UpiLogo className="h-5" />
+            </label>
+
+            {/* Method 2: Credit / Debit Card */}
+            <label
+              id="payment-method-card"
+              onClick={() => setSelectedMethod('card')}
+              className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
+                selectedMethod === 'card'
+                  ? 'border-gray-900 bg-gray-50/70 ring-1 ring-gray-900 shadow-2xs'
+                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50/30'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  checked={selectedMethod === 'card'}
+                  onChange={() => setSelectedMethod('card')}
+                  className="w-4 h-4 text-black border-gray-300 focus:ring-black accent-black"
+                />
+                <div>
+                  <span className="block text-xs font-bold text-gray-900">Credit / Debit Card</span>
+                  <span className="block text-[11px] text-gray-500 mt-0.5">Visa, Mastercard and more</span>
+                </div>
+              </div>
+              <CreditCard className="w-5 h-5 text-gray-700" />
             </label>
           </div>
         </div>
@@ -212,27 +295,6 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
                 <BhimIcon />
               </div>
 
-              {/* Live interactive Payment Test / Trigger Button */}
-              <div className="w-full mt-5 pt-3 border-t border-gray-100">
-                <button
-                  id="simulate-upi-success-btn"
-                  onClick={handleSimulatePaymentSuccess}
-                  disabled={isVerifying}
-                  className="w-full py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition"
-                >
-                  {isVerifying ? (
-                    <>
-                      <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Verifying UPI Payment...</span>
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>I Have Completed Payment</span>
-                    </>
-                  )}
-                </button>
-              </div>
             </>
           ) : selectedMethod === 'card' ? (
             /* Credit / Debit Card Form */
@@ -468,6 +530,7 @@ export const PaymentScannerCheckout: React.FC<PaymentScannerCheckoutProps> = ({
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 };
